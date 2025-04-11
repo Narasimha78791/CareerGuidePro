@@ -1,177 +1,177 @@
 [
   {
     "id": 101,
-    "name": "Front End Developer",
+    "title": "Front End Developer",
     "description": "Create responsive and user-friendly web interfaces using HTML, CSS, and JavaScript frameworks.",
     "required_skills": "HTML, CSS, JavaScript, React, Angular, Vue.js, UI/UX design principles",
-    "industry": "Web Development"
+    "category": "Web Development"
   },
   {
     "id": 102,
-    "name": "Backend Developer",
+    "title": "Backend Developer",
     "description": "Build server-side applications and APIs using languages like Python, Java, or Node.js.",
     "required_skills": "Python, Java, Node.js, Express, Django, Flask, API design, Database management",
-    "industry": "Software Development"
+    "category": "Software Development"
   },
   {
     "id": 103,
-    "name": "Full Stack Developer",
+    "title": "Full Stack Developer",
     "description": "Develop both front-end and back-end components of web applications.",
     "required_skills": "JavaScript, HTML, CSS, Node.js, React, Python, MongoDB, SQL",
-    "industry": "Web Development"
+    "category": "Web Development"
   },
   {
     "id": 104,
-    "name": "UI/UX Designer",
+    "title": "UI/UX Designer",
     "description": "Design intuitive user interfaces and enhance user experience for websites and applications.",
     "required_skills": "Figma, Sketch, Adobe XD, Wireframing, Prototyping, User research, Visual design",
-    "industry": "Design"
+    "category": "Design"
   },
   {
     "id": 105,
-    "name": "Data Analyst",
+    "title": "Data Analyst",
     "description": "Analyze and interpret complex data sets to inform business decisions.",
     "required_skills": "SQL, Excel, PowerBI, Tableau, Data visualization, Statistical analysis",
-    "industry": "Data Science"
+    "category": "Data Science"
   },
   {
     "id": 106,
-    "name": "Data Scientist",
+    "title": "Data Scientist",
     "description": "Apply advanced analytics, machine learning, and statistical methods to extract insights from data.",
     "required_skills": "Python, R, SQL, Machine learning, Statistics, Data visualization, TensorFlow, PyTorch",
-    "industry": "Data Science"
+    "category": "Data Science"
   },
   {
     "id": 107,
-    "name": "Mobile App Developer",
+    "title": "Mobile App Developer",
     "description": "Create applications for iOS and Android platforms.",
     "required_skills": "Swift, Kotlin, Java, React Native, Flutter, Mobile UI design",
-    "industry": "Mobile Development"
+    "category": "Mobile Development"
   },
   {
     "id": 108,
-    "name": "DevOps Engineer",
+    "title": "DevOps Engineer",
     "description": "Implement and manage continuous integration and delivery systems.",
     "required_skills": "AWS, Docker, Kubernetes, CI/CD, Jenkins, Git, Linux",
-    "industry": "DevOps"
+    "category": "DevOps"
   },
   {
     "id": 109,
-    "name": "Cybersecurity Analyst",
+    "title": "Cybersecurity Analyst",
     "description": "Protect computer systems and networks from security breaches and threats.",
     "required_skills": "Network security, Vulnerability assessment, Security tools, Incident response",
-    "industry": "Cybersecurity"
+    "category": "Cybersecurity"
   },
   {
     "id": 110,
-    "name": "Digital Marketing Specialist",
+    "title": "Digital Marketing Specialist",
     "description": "Develop and implement online marketing strategies across various digital channels.",
     "required_skills": "SEO, SEM, Content creation, Social media marketing, Email marketing, Analytics",
-    "industry": "Marketing"
+    "category": "Marketing"
   },
   {
     "id": 111,
-    "name": "Graphic Designer",
+    "title": "Graphic Designer",
     "description": "Create visual content for print and digital media.",
     "required_skills": "Adobe Photoshop, Illustrator, InDesign, Typography, Color theory, Layout design",
-    "industry": "Design"
+    "category": "Design"
   },
   {
     "id": 112,
-    "name": "Product Manager",
+    "title": "Product Manager",
     "description": "Oversee the development and marketing of a product throughout its lifecycle.",
     "required_skills": "Product strategy, Market research, User experience, Technical knowledge",
-    "industry": "Product Management"
+    "category": "Product Management"
   },
   {
     "id": 113,
-    "name": "Business Analyst",
+    "title": "Business Analyst",
     "description": "Analyze business processes and systems to identify areas for improvement.",
     "required_skills": "Requirements gathering, Process analysis, Data analysis, Documentation",
-    "industry": "Business"
+    "category": "Business"
   },
   {
     "id": 114,
-    "name": "Cloud Architect",
+    "title": "Cloud Architect",
     "description": "Design and implement cloud computing solutions for organizations.",
     "required_skills": "AWS, Azure, GCP, Cloud security, Virtualization, Solution architecture",
-    "industry": "Cloud Computing"
+    "category": "Cloud Computing"
   },
   {
     "id": 115,
-    "name": "Game Developer",
+    "title": "Game Developer",
     "description": "Design and program video games for various platforms.",
     "required_skills": "Unity, Unreal Engine, C#, C++, 3D modeling, Game design principles",
-    "industry": "Game Development"
+    "category": "Game Development"
   },
   {
     "id": 116,
-    "name": "Technical Writer",
+    "title": "Technical Writer",
     "description": "Create clear and comprehensive technical documentation for products and services.",
     "required_skills": "Technical writing, Documentation tools, Research, Editing, Information architecture",
-    "industry": "Content"
+    "category": "Content"
   },
   {
     "id": 117,
-    "name": "Network Engineer",
+    "title": "Network Engineer",
     "description": "Design, implement, and manage computer networks.",
     "required_skills": "Network protocols, Routing, Switching, Firewall configuration, Troubleshooting",
-    "industry": "IT Infrastructure"
+    "category": "IT Infrastructure"
   },
   {
     "id": 118,
-    "name": "AI/ML Engineer",
+    "title": "AI/ML Engineer",
     "description": "Develop artificial intelligence and machine learning models and applications.",
     "required_skills": "Python, TensorFlow, PyTorch, Deep learning, NLP, Computer vision",
-    "industry": "Artificial Intelligence"
+    "category": "Artificial Intelligence"
   },
   {
     "id": 119,
-    "name": "Quality Assurance Engineer",
+    "title": "Quality Assurance Engineer",
     "description": "Ensure software quality through systematic testing and evaluation.",
     "required_skills": "Test planning, Manual testing, Automated testing, Selenium, Test documentation",
-    "industry": "Quality Assurance"
+    "category": "Quality Assurance"
   },
   {
     "id": 120,
-    "name": "Blockchain Developer",
+    "title": "Blockchain Developer",
     "description": "Build and maintain blockchain protocols and smart contracts.",
     "required_skills": "Solidity, Ethereum, Smart contracts, Cryptography, Web3.js",
-    "industry": "Blockchain"
+    "category": "Blockchain"
   },
   {
     "id": 121,
-    "name": "Content Writer",
+    "title": "Content Writer",
     "description": "Create written content for various platforms including websites, blogs, and social media.",
     "required_skills": "Writing, Editing, Research, SEO knowledge, Content strategy",
-    "industry": "Content"
+    "category": "Content"
   },
   {
     "id": 122,
-    "name": "SEO Specialist",
+    "title": "SEO Specialist",
     "description": "Optimize websites to improve search engine visibility and rankings.",
     "required_skills": "Keyword research, On-page SEO, Off-page SEO, Analytics, Content optimization",
-    "industry": "Digital Marketing"
+    "category": "Digital Marketing"
   },
   {
     "id": 123,
-    "name": "Project Manager",
+    "title": "Project Manager",
     "description": "Plan, execute, and close projects while ensuring they are completed on time and within budget.",
     "required_skills": "Planning, Budgeting, Risk management, Team leadership, Stakeholder management",
-    "industry": "Project Management"
+    "category": "Project Management"
   },
   {
     "id": 124,
-    "name": "System Administrator",
+    "title": "System Administrator",
     "description": "Maintain and configure computer systems and servers.",
     "required_skills": "Linux administration, Windows Server, Virtualization, Backup management",
-    "industry": "IT Infrastructure"
+    "category": "IT Infrastructure"
   },
   {
     "id": 125,
-    "name": "Database Administrator",
+    "title": "Database Administrator",
     "description": "Manage and maintain database systems.",
     "required_skills": "SQL, MySQL, PostgreSQL, MongoDB, Database optimization, Backup and recovery",
-    "industry": "Database Management"
+    "category": "Database Management"
   }
 ]

@@ -1,0 +1,26 @@
+id,title,description,required_skills,category
+101,Front End Developer,"Create responsive and user-friendly web interfaces using HTML, CSS, and JavaScript frameworks.","HTML, CSS, JavaScript, React, Angular, Vue.js, UI/UX design principles",Web Development
+102,Backend Developer,"Build server-side applications and APIs using languages like Python, Java, or Node.js.","Python, Java, Node.js, Express, Django, Flask, API design, Database management",Software Development
+103,Full Stack Developer,Develop both front-end and back-end components of web applications.,"JavaScript, HTML, CSS, Node.js, React, Python, MongoDB, SQL",Web Development
+104,UI/UX Designer,Design intuitive user interfaces and enhance user experience for websites and applications.,"Figma, Sketch, Adobe XD, Wireframing, Prototyping, User research, Visual design",Design
+105,Data Analyst,Analyze and interpret complex data sets to inform business decisions.,"SQL, Excel, PowerBI, Tableau, Data visualization, Statistical analysis",Data Science
+106,Data Scientist,"Apply advanced analytics, machine learning, and statistical methods to extract insights from data.","Python, R, SQL, Machine learning, Statistics, Data visualization, TensorFlow, PyTorch",Data Science
+107,Mobile App Developer,Create applications for iOS and Android platforms.,"Swift, Kotlin, Java, React Native, Flutter, Mobile UI design",Mobile Development
+108,DevOps Engineer,Implement and manage continuous integration and delivery systems.,"AWS, Docker, Kubernetes, CI/CD, Jenkins, Git, Linux",DevOps
+109,Cybersecurity Analyst,Protect computer systems and networks from security breaches and threats.,"Network security, Vulnerability assessment, Security tools, Incident response",Cybersecurity
+110,Digital Marketing Specialist,Develop and implement online marketing strategies across various digital channels.,"SEO, SEM, Content creation, Social media marketing, Email marketing, Analytics",Marketing
+111,Graphic Designer,Create visual content for print and digital media.,"Adobe Photoshop, Illustrator, InDesign, Typography, Color theory, Layout design",Design
+112,Product Manager,Oversee the development and marketing of a product throughout its lifecycle.,"Product strategy, Market research, User experience, Technical knowledge",Product Management
+113,Business Analyst,Analyze business processes and systems to identify areas for improvement.,"Requirements gathering, Process analysis, Data analysis, Documentation",Business
+114,Cloud Architect,Design and implement cloud computing solutions for organizations.,"AWS, Azure, GCP, Cloud security, Virtualization, Solution architecture",Cloud Computing
+115,Game Developer,Design and program video games for various platforms.,"Unity, Unreal Engine, C#, C++, 3D modeling, Game design principles",Game Development
+116,Technical Writer,Create clear and comprehensive technical documentation for products and services.,"Technical writing, Documentation tools, Research, Editing, Information architecture",Content
+117,Network Engineer,"Design, implement, and manage computer networks.","Network protocols, Routing, Switching, Firewall configuration, Troubleshooting",IT Infrastructure
+118,AI/ML Engineer,Develop artificial intelligence and machine learning models and applications.,"Python, TensorFlow, PyTorch, Deep learning, NLP, Computer vision",Artificial Intelligence
+119,Quality Assurance Engineer,Ensure software quality through systematic testing and evaluation.,"Test planning, Manual testing, Automated testing, Selenium, Test documentation",Quality Assurance
+120,Blockchain Developer,Build and maintain blockchain protocols and smart contracts.,"Solidity, Ethereum, Smart contracts, Cryptography, Web3.js",Blockchain
+121,Content Writer,"Create written content for various platforms including websites, blogs, and social media.","Writing, Editing, Research, SEO knowledge, Content strategy",Content
+122,SEO Specialist,Optimize websites to improve search engine visibility and rankings.,"Keyword research, On-page SEO, Off-page SEO, Analytics, Content optimization",Digital Marketing
+123,Project Manager,"Plan, execute, and close projects while ensuring they are completed on time and within budget.","Planning, Budgeting, Risk management, Team leadership, Stakeholder management",Project Management
+124,System Administrator,Maintain and configure computer systems and servers.,"Linux administration, Windows Server, Virtualization, Backup management",IT Infrastructure
+125,Database Administrator,Manage and maintain database systems.,"SQL, MySQL, PostgreSQL, MongoDB, Database optimization, Backup and recovery",Database Management

@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import nltk
 from nltk.corpus import stopwords
@@ -8,7 +8,12 @@ from nltk.tokenize import word_tokenize
 import json
 import os
 import logging
+import re
 from datetime import datetime
+
+# Setup better logging
+logging.basicConfig(level=logging.DEBUG, 
+                   format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 # Download NLTK resources if not already present
 try:
@@ -24,13 +29,31 @@ class CareerRecommendationEngine:
         self.vectorizer = TfidfVectorizer(stop_words='english')
         self.career_features = None
         self._preprocess_careers()
-        # Load common IT/programming terms to improve matching
+        # Load common skills across different domains to improve matching
         self.tech_skills = [
-            "python", "java", "javascript", "html", "css", "sql", "nosql", "react", 
-            "angular", "vue", "node", "express", "django", "flask", "spring", 
-            "machine learning", "data science", "data analysis", "artificial intelligence",
-            "cloud", "aws", "azure", "gcp", "devops", "ci/cd", "docker", "kubernetes",
-            "design", "photoshop", "illustrator", "ui", "ux", "wireframing", "prototyping"
+            # Technical/IT Skills
+            "python", "java", "javascript", "typescript", "html", "css", "sql", "nosql", "react", 
+            "angular", "vue", "node", "express", "django", "flask", "spring", "ruby", "php", "c++", "c#",
+            "machine learning", "data science", "data analysis", "artificial intelligence", "nlp",
+            "cloud", "aws", "azure", "gcp", "devops", "ci/cd", "docker", "kubernetes", "jenkins",
+            "blockchain", "ethereum", "solidity", "cybersecurity", "networking", "linux", "unix",
+            
+            # Design Skills
+            "design", "photoshop", "illustrator", "figma", "sketch", "indesign", "ui", "ux", 
+            "wireframing", "prototyping", "typography", "color theory", "graphic design",
+            
+            # Business/Management Skills
+            "project management", "agile", "scrum", "marketing", "sales", "seo", "social media",
+            "analytics", "leadership", "communication", "teamwork", "finance", "accounting",
+            "business analysis", "strategy", "operations", "human resources", "consulting",
+            
+            # Healthcare/Science Skills
+            "medicine", "biology", "chemistry", "physics", "research", "healthcare", "patient care",
+            "clinical", "laboratory", "pharmaceutical", "nursing", "therapy", "diagnostic",
+            
+            # Creative/Media Skills
+            "writing", "editing", "content creation", "journalism", "copywriting", "video editing",
+            "animation", "photography", "storytelling", "audio production", "music", "filmmaking"
         ]
         
     def _load_careers_data(self):
@@ -109,14 +132,14 @@ class CareerRecommendationEngine:
         return weighted_text.lower()
     
     def get_recommendations(self, user_profile, num_recommendations=5):
-        """Generate career recommendations based on user profile"""
+        """Generate career recommendations based on user profile using a sophisticated matching algorithm"""
         # Check if user profile has sufficient data
         if not user_profile.get('skills') and not user_profile.get('interests'):
             logging.warning("User profile lacks sufficient data for accurate recommendations")
             # Return diverse recommendations from different industries
             return self._get_diverse_recommendations(num_recommendations)
         
-        # Get user skills and interests as separate lists for direct matching
+        # Extract user skills and interests as separate lists for direct matching
         user_skills = self._extract_keywords(user_profile.get('skills', ''))
         user_interests = self._extract_keywords(user_profile.get('interests', ''))
         user_education = self._extract_keywords(user_profile.get('education', ''))
@@ -125,43 +148,120 @@ class CareerRecommendationEngine:
         logging.debug(f"User skills: {user_skills}")
         logging.debug(f"User interests: {user_interests}")
         
-        # Calculate direct skill match scores
-        direct_match_scores = []
+        # Initialize scores for each matching method
+        skill_match_scores = []
+        interest_match_scores = []
+        education_match_scores = []
+        experience_match_scores = []
+        semantic_match_scores = []
+        
+        # Calculate detailed match scores for each career
         for idx, career in enumerate(self.careers_data):
+            # Extract career keywords
             career_skills = self._extract_keywords(career['required_skills'])
             career_desc = self._extract_keywords(career['description'])
             career_industry = self._extract_keywords(career['industry'])
+            career_name_keywords = self._extract_keywords(career['name'])
             
-            # Calculate direct skill matches
-            skill_matches = sum(1 for skill in user_skills if any(self._keyword_match(skill, cs) for cs in career_skills))
-            interest_matches = sum(1 for interest in user_interests if any(self._keyword_match(interest, cd) for cd in career_desc + career_industry))
+            # Combined career keywords for better matching
+            all_career_keywords = career_skills + career_desc + career_industry + career_name_keywords
             
-            # Normalize by the max possible matches and weight skills higher
-            skill_match_score = skill_matches / max(len(user_skills), 1) * 0.7 if user_skills else 0
-            interest_match_score = interest_matches / max(len(user_interests), 1) * 0.3 if user_interests else 0
+            # 1. Skill matching with detailed scoring
+            skill_score = 0
+            if user_skills:
+                # Count exact matches (higher weight)
+                exact_matches = sum(1 for skill in user_skills if any(skill.lower() == cs.lower() for cs in career_skills))
+                # Count partial matches (lower weight)
+                partial_matches = sum(1 for skill in user_skills if any(self._keyword_match(skill, cs) for cs in career_skills) and 
+                                     not any(skill.lower() == cs.lower() for cs in career_skills))
+                
+                # Calculate weighted score (exact matches count more)
+                skill_score = (exact_matches * 1.5 + partial_matches * 0.5) / max(len(user_skills), 1)
+                
+                # Bonus for high skill coverage
+                if len(user_skills) > 2 and exact_matches >= len(user_skills) * 0.5:
+                    skill_score *= 1.2  # 20% boost for having many relevant skills
             
-            # Combined score
-            direct_score = skill_match_score + interest_match_score
-            direct_match_scores.append(direct_score)
+            # 2. Interest matching (check against description and industry)
+            interest_score = 0
+            if user_interests:
+                interest_matches = sum(1 for interest in user_interests if any(self._keyword_match(interest, kw) for kw in career_desc + career_industry))
+                interest_score = interest_matches / max(len(user_interests), 1)
             
-        # Use vectorizer for semantic similarity as well
+            # 3. Education matching
+            education_score = 0
+            if user_education:
+                edu_matches = sum(1 for edu in user_education if any(self._keyword_match(edu, kw) for kw in all_career_keywords))
+                education_score = edu_matches / max(len(user_education), 1) * 0.8  # Slightly less weight
+            
+            # 4. Experience matching
+            experience_score = 0
+            if user_experience:
+                exp_matches = sum(1 for exp in user_experience if any(self._keyword_match(exp, kw) for kw in all_career_keywords))
+                experience_score = exp_matches / max(len(user_experience), 1) * 0.8
+            
+            # Store individual scores
+            skill_match_scores.append(skill_score)
+            interest_match_scores.append(interest_score)
+            education_match_scores.append(education_score)
+            experience_match_scores.append(experience_score)
+        
+        # 5. Calculate semantic similarity using TF-IDF vectorization
         user_text = self._preprocess_user_profile(user_profile)
         try:
             user_features = self.vectorizer.transform([user_text])
             semantic_similarities = cosine_similarity(user_features, self.career_features).flatten()
-            
-            # Combine direct matching with semantic similarity
-            # Weight: 60% direct matching, 40% semantic similarity
-            combined_scores = [0.6 * direct + 0.4 * semantic for direct, semantic in zip(direct_match_scores, semantic_similarities)]
-            
-            logging.debug(f"Combined scores range: {min(combined_scores):.4f} to {max(combined_scores):.4f}")
+            semantic_match_scores = list(semantic_similarities)
         except Exception as e:
             logging.error(f"Error calculating semantic similarity: {str(e)}")
-            # Fall back to just direct matching if vectorizer fails
-            combined_scores = direct_match_scores
-            
-        # Get indices of top recommendations
-        top_indices = np.array(combined_scores).argsort()[-num_recommendations:][::-1]
+            semantic_match_scores = [0.3] * len(self.careers_data)  # Fallback
+        
+        # 6. Combine all scores with appropriate weights
+        combined_scores = []
+        for i in range(len(self.careers_data)):
+            # Weighted average of all scores - skills have highest weight
+            score = (
+                skill_match_scores[i] * 0.45 +          # Skills (highest weight)
+                interest_match_scores[i] * 0.25 +        # Interests
+                semantic_match_scores[i] * 0.15 +        # Semantic analysis
+                education_match_scores[i] * 0.1 +        # Education
+                experience_match_scores[i] * 0.05        # Experience
+            )
+            combined_scores.append(score)
+        
+        logging.debug(f"Combined scores range: {min(combined_scores):.4f} to {max(combined_scores):.4f}")
+        
+        # Ensure diversity by getting recommendations from different industries if possible
+        # (if we have enough high scoring careers)
+        top_indices = []
+        all_indices = np.array(combined_scores).argsort()[::-1]  # All indices, sorted by score
+        
+        # First, add the highest scoring careers up to num_recommendations
+        top_indices = list(all_indices[:num_recommendations])
+        
+        # Ensure we have careers from at least 3 different industries if possible
+        seen_industries = set(self.careers_data[idx]['industry'] for idx in top_indices)
+        if len(seen_industries) < min(3, len(set(career['industry'] for career in self.careers_data))):
+            # Try to add more diverse industries by replacing lower scored careers
+            for idx in all_indices[num_recommendations:num_recommendations+10]:  # Look at next 10 careers
+                industry = self.careers_data[idx]['industry']
+                if industry not in seen_industries:
+                    # Replace the lowest scored career in our recommendations
+                    lowest_score_idx = min(top_indices, key=lambda i: combined_scores[i])
+                    lowest_score_industry = self.careers_data[lowest_score_idx]['industry']
+                    
+                    # Only replace if we have more than one career from this industry
+                    if list(self.careers_data[i]['industry'] for i in top_indices).count(lowest_score_industry) > 1:
+                        top_indices.remove(lowest_score_idx)
+                        top_indices.append(idx)
+                        seen_industries.add(industry)
+                
+                # Stop if we've reached desired industry diversity
+                if len(seen_industries) >= 3:
+                    break
+        
+        # Sort final recommendations by score
+        top_indices.sort(key=lambda idx: combined_scores[idx], reverse=True)
         
         # Create recommendation results
         recommendations = []
