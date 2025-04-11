@@ -85,24 +85,43 @@ class CareerRecommendationEngine:
             career_texts.append(combined_text.lower())
         
         # Create TF-IDF features
+        self.vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 2), max_features=5000)
         self.career_features = self.vectorizer.fit_transform(career_texts)
     
     def _preprocess_user_profile(self, user_profile):
         """Preprocess user profile for recommendation"""
-        # Combine relevant user profile fields
-        combined_text = f"{user_profile.get('skills', '')} {user_profile.get('education', '')} {user_profile.get('interests', '')} {user_profile.get('experience', '')}"
-        return combined_text.lower()
+        # Give higher weight to skills and interests
+        skills = user_profile.get('skills', '').strip()
+        interests = user_profile.get('interests', '').strip()
+        education = user_profile.get('education', '').strip()
+        experience = user_profile.get('experience', '').strip()
+        
+        # Give more weight to skills and interests by repeating them
+        weighted_text = f"{skills} {skills} {skills} {interests} {interests} {education} {experience}"
+        return weighted_text.lower()
     
     def get_recommendations(self, user_profile, num_recommendations=5):
         """Generate career recommendations based on user profile"""
+        # Check if user profile has sufficient data
+        if not user_profile.get('skills') and not user_profile.get('interests'):
+            logging.warning("User profile lacks sufficient data for accurate recommendations")
+            # Return diverse recommendations from different industries
+            return self._get_diverse_recommendations(num_recommendations)
+            
         # Preprocess user profile
         user_text = self._preprocess_user_profile(user_profile)
+        logging.debug(f"Processed user profile text: {user_text}")
         
         # Transform user text using the same vectorizer
-        user_features = self.vectorizer.transform([user_text])
-        
-        # Calculate similarity between user profile and each career
-        similarities = cosine_similarity(user_features, self.career_features).flatten()
+        try:
+            user_features = self.vectorizer.transform([user_text])
+            
+            # Calculate similarity between user profile and each career
+            similarities = cosine_similarity(user_features, self.career_features).flatten()
+            logging.debug(f"Similarity scores range: {similarities.min():.4f} to {similarities.max():.4f}")
+        except Exception as e:
+            logging.error(f"Error calculating recommendations: {str(e)}")
+            return self._get_diverse_recommendations(num_recommendations)
         
         # Get indices of top recommendations
         top_indices = similarities.argsort()[-num_recommendations:][::-1]
@@ -133,6 +152,47 @@ class CareerRecommendationEngine:
     def get_all_careers(self):
         """Return all careers data"""
         return self.careers_data
+        
+    def _get_diverse_recommendations(self, num_recommendations=5):
+        """Return diverse career recommendations from different industries"""
+        # Get unique industries
+        industries = {}
+        for career in self.careers_data:
+            industry = career['industry']
+            if industry not in industries:
+                industries[industry] = []
+            industries[industry].append(career)
+        
+        # Select careers from different industries
+        recommendations = []
+        industries_list = list(industries.keys())
+        
+        # Ensure we don't try to get more recommendations than available industries
+        num_industries = min(num_recommendations, len(industries_list))
+        
+        for i in range(num_industries):
+            industry = industries_list[i % len(industries_list)]
+            # Get a career from this industry that we haven't recommended yet
+            industry_careers = industries[industry]
+            for career in industry_careers:
+                # Check if we've already recommended this career
+                if not any(rec.get('career_id') == career['id'] for rec in recommendations):
+                    recommendations.append({
+                        'career_id': career['id'],
+                        'name': career['name'],
+                        'description': career['description'],
+                        'required_skills': career['required_skills'],
+                        'industry': career['industry'],
+                        'score': 0.6,  # Medium score for default recommendations
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    break
+            
+            # If we have enough recommendations, stop
+            if len(recommendations) >= num_recommendations:
+                break
+                
+        return recommendations
     
     def extract_skills_from_text(self, text):
         """Extract potential skills from a text input"""
