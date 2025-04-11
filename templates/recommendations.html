@@ -18,7 +18,10 @@
     
     {% if recommendations %}
     <div class="chart-container mb-5">
-        <canvas id="recommendation-scores-chart" data-recommendations="{{ recommendations | map(attribute='career') | list | tojson }}"></canvas>
+        <canvas id="recommendation-scores-chart" 
+                data-careers="{{ recommendations | map(attribute='career.name') | list | tojson }}"
+                data-scores="{{ recommendations | map(attribute='score') | list | tojson }}"
+                data-industries="{{ recommendations | map(attribute='career.industry') | list | tojson }}"></canvas>
     </div>
     
     <div class="row g-4">

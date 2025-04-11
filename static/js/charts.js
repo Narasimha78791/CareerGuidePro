@@ -4,14 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (trendChartElement) {
         const ctx = trendChartElement.getContext('2d');
         
-        // Parse data from the data attribute
-        const rawData = trendChartElement.dataset.trends;
-        const trendsData = JSON.parse(rawData);
+        // Parse data from the data attributes
+        const labels = JSON.parse(trendChartElement.dataset.careerNames);
+        const demandData = JSON.parse(trendChartElement.dataset.demandLevels).map(level => (level * 100).toFixed(0));
+        const minSalary = JSON.parse(trendChartElement.dataset.salaryMin);
+        const maxSalary = JSON.parse(trendChartElement.dataset.salaryMax);
         
-        // Prepare data for the chart
-        const labels = trendsData.map(item => item.name);
-        const demandData = trendsData.map(item => (item.demand_level * 100).toFixed(0));
-        const salaryData = trendsData.map(item => (item.salary_range_min + item.salary_range_max) / 2);
+        // Calculate average salary for each career
+        const salaryData = minSalary.map((min, index) => (parseInt(min) + parseInt(maxSalary[index])) / 2);
         
         const trendChart = new Chart(ctx, {
             type: 'bar',
@@ -50,9 +50,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 plugins: {
                     tooltip: {
                         callbacks: {
+                            label: function(context) {
+                                const index = context.dataIndex;
+                                return `Demand Level: ${context.raw}%`;
+                            },
                             afterLabel: function(context) {
                                 const index = context.dataIndex;
-                                return `Avg. Salary: $${salaryData[index].toLocaleString()}`;
+                                return [
+                                    `Avg. Salary: $${salaryData[index].toLocaleString()}`,
+                                    `Range: $${parseInt(minSalary[index]).toLocaleString()} - $${parseInt(maxSalary[index]).toLocaleString()}`
+                                ];
                             }
                         }
                     },
@@ -143,18 +150,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (recommendationChartElement) {
         const ctx = recommendationChartElement.getContext('2d');
         
-        // Parse data from the data attribute
-        const rawData = recommendationChartElement.dataset.recommendations;
-        const recommendationsData = JSON.parse(rawData);
-        
-        // Prepare data for the chart
-        const labels = recommendationsData.map(item => item.name);
-        const scores = recommendationsData.map(item => (item.score * 100).toFixed(1));
+        // Parse data from the data attributes
+        const careers = JSON.parse(recommendationChartElement.dataset.careers);
+        const scores = JSON.parse(recommendationChartElement.dataset.scores).map(score => (score * 100).toFixed(1));
+        const industries = JSON.parse(recommendationChartElement.dataset.industries);
         
         const recommendationChart = new Chart(ctx, {
             type: 'polarArea',
             data: {
-                labels: labels,
+                labels: careers,
                 datasets: [
                     {
                         label: 'Match Score (%)',
@@ -191,7 +195,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     tooltip: {
                         callbacks: {
                             label: function(context) {
+                                const index = context.dataIndex;
                                 return `Match Score: ${context.raw}%`;
+                            },
+                            afterLabel: function(context) {
+                                const index = context.dataIndex;
+                                return `Industry: ${industries[index]}`;
                             }
                         }
                     },

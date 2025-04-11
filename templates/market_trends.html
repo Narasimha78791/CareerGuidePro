@@ -15,13 +15,11 @@
                     
                     {% if careers_with_trends %}
                     <div class="chart-container">
-                        <canvas id="market-trends-chart" data-trends="{{ 
-                            careers_with_trends | map(attribute=0) | map(attribute='name') | zip(
-                            careers_with_trends | map(attribute=1) | map(attribute='demand_level'),
-                            careers_with_trends | map(attribute=1) | map(attribute='salary_range_min'),
-                            careers_with_trends | map(attribute=1) | map(attribute='salary_range_max')
-                            ) | map('zip') | list | tojson 
-                        }}"></canvas>
+                        <canvas id="market-trends-chart" 
+                                data-career-names="{{ careers_with_trends | map(attribute=0) | map(attribute='name') | list | tojson }}"
+                                data-demand-levels="{{ careers_with_trends | map(attribute=1) | map(attribute='demand_level') | list | tojson }}"
+                                data-salary-min="{{ careers_with_trends | map(attribute=1) | map(attribute='salary_range_min') | list | tojson }}"
+                                data-salary-max="{{ careers_with_trends | map(attribute=1) | map(attribute='salary_range_max') | list | tojson }}"></canvas>
                     </div>
                     {% else %}
                     <div class="text-center py-5">
