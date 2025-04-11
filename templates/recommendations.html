@@ -24,6 +24,23 @@
                 data-industries="{{ recommendations | map(attribute='career.industry') | list | tojson }}"></canvas>
     </div>
     
+    <!-- For debugging -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            // Test access to the canvas element
+            const chart = document.getElementById('recommendation-scores-chart');
+            // Test parsing data attributes
+            const careers = JSON.parse(chart.dataset.careers || '[]');
+            const scores = JSON.parse(chart.dataset.scores || '[]');
+            const industries = JSON.parse(chart.dataset.industries || '[]');
+            console.log("Successfully parsed chart data:", { careers, scores, industries });
+        } catch (error) {
+            console.error("Error parsing chart data:", error);
+        }
+    });
+    </script>
+    
     <div class="row g-4">
         {% for recommendation in recommendations %}
         <div class="col-lg-6">
