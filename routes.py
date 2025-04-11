@@ -132,36 +132,59 @@ def get_recommendations():
         'interests': current_user.interests or ''
     }
     
-    # Get recommendations from ML engine
-    recommendations = ml_engine.get_recommendations(user_profile)
-    
-    # Store recommendations in the database
-    for rec in recommendations:
-        # Check if career exists in the database, if not create it
-        career = Career.query.filter_by(id=rec['career_id']).first()
-        if not career:
-            career = Career(
-                id=rec['career_id'],
-                name=rec['name'],
-                description=rec['description'],
-                required_skills=rec['required_skills'],
-                industry=rec['industry']
-            )
-            db.session.add(career)
-        
-        # Create recommendation
-        new_recommendation = Recommendation(
-            user_id=current_user.id,
-            career_id=career.id,
-            score=rec['score']
-        )
-        db.session.add(new_recommendation)
-    
     try:
+        # First, delete all existing recommendations for this user
+        # This ensures we don't have duplicates or old recommendations
+        existing_recommendations = Recommendation.query.filter_by(user_id=current_user.id).all()
+        
+        # Remove any associated feedback first (to avoid foreign key constraint errors)
+        for rec in existing_recommendations:
+            Feedback.query.filter_by(recommendation_id=rec.id).delete()
+        
+        # Now delete the recommendations
+        Recommendation.query.filter_by(user_id=current_user.id).delete()
+        
+        # Get recommendations from ML engine
+        recommendations = ml_engine.get_recommendations(user_profile)
+        
+        # Create a set to track career IDs we've already added
+        # This provides an extra layer of deduplication
+        added_career_ids = set()
+        
+        # Store recommendations in the database
+        for rec in recommendations:
+            # Skip if we already added this career (prevents duplicates)
+            if rec['career_id'] in added_career_ids:
+                continue
+                
+            # Add to our tracking set
+            added_career_ids.add(rec['career_id'])
+            
+            # Check if career exists in the database, if not create it
+            career = Career.query.filter_by(id=rec['career_id']).first()
+            if not career:
+                career = Career(
+                    id=rec['career_id'],
+                    name=rec['name'],
+                    description=rec['description'],
+                    required_skills=rec['required_skills'],
+                    industry=rec['industry']
+                )
+                db.session.add(career)
+            
+            # Create recommendation
+            new_recommendation = Recommendation(
+                user_id=current_user.id,
+                career_id=career.id,
+                score=rec['score']
+            )
+            db.session.add(new_recommendation)
+        
         db.session.commit()
+        flash('Your career recommendations have been updated', 'success')
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Error storing recommendations: {str(e)}")
+        logging.error(f"Error generating recommendations: {str(e)}")
         flash('An error occurred while processing your recommendations', 'danger')
         return redirect(url_for('profile'))
     
