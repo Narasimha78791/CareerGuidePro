@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - AI Career Guide{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Create Your Account</h2>
+                    <p class="text-center text-muted mb-4">Start your journey to finding the perfect career path</p>
+                    
+                    <form class="needs-validation" action="{{ url_for('register') }}" method="post" novalidate>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Full Name</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required>
+                                <div class="invalid-feedback">
+                                    Please enter your name.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Create a password" required minlength="8">
+                                <div class="invalid-feedback">
+                                    Password must be at least 8 characters long.
+                                </div>
+                            </div>
+                            <div class="form-text">
+                                Use at least 8 characters with a mix of letters, numbers & symbols.
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="confirm_password" class="form-label">Confirm Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                                <div class="invalid-feedback">
+                                    Passwords do not match.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">Create Account</button>
+                        </div>
+                    </form>
+                    
+                    <div class="auth-separator">
+                        <span>or</span>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}" class="text-decoration-none">Log In</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Custom validation for password matching
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirm_password');
+    
+    function validatePassword() {
+        if (password.value !== confirmPassword.value) {
+            confirmPassword.setCustomValidity("Passwords don't match");
+        } else {
+            confirmPassword.setCustomValidity('');
+        }
+    }
+    
+    password.addEventListener('change', validatePassword);
+    confirmPassword.addEventListener('keyup', validatePassword);
+</script>
+{% endblock %}

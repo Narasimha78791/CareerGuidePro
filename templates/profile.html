@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - AI Career Guide{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 100px; height: 100px; font-size: 2.5rem;">
+                            {{ current_user.name[0] | upper }}
+                        </div>
+                        <h4 class="mb-1">{{ current_user.name }}</h4>
+                        <p class="text-muted">{{ current_user.email }}</p>
+                        <a href="{{ url_for('edit_profile') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-edit"></i> Edit Profile
+                        </a>
+                    </div>
+                    
+                    <hr>
+                    
+                    <h5 class="mb-3">Profile Information</h5>
+                    <div class="mb-3">
+                        <p class="text-muted mb-1">Age</p>
+                        <p class="fw-bold">{{ current_user.age or 'Not specified' }}</p>
+                    </div>
+                    
+                    {% if current_user.skills %}
+                    <div class="mb-3">
+                        <p class="text-muted mb-1">Skills</p>
+                        <div>
+                            {% for skill in current_user.skills.split(',') %}
+                            <span class="badge bg-primary rounded-pill mb-1">{{ skill.strip() }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <p class="text-muted mb-1">Education</p>
+                        <p>{{ current_user.education or 'Not specified' }}</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <p class="text-muted mb-1">Experience</p>
+                        <p>{{ current_user.experience or 'Not specified' }}</p>
+                    </div>
+                    
+                    <div>
+                        <p class="text-muted mb-1">Interests</p>
+                        <p>{{ current_user.interests or 'Not specified' }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            {% if current_user.skills and current_user.interests %}
+            <div class="mt-4 d-grid">
+                <a href="{{ url_for('get_recommendations') }}" class="btn btn-primary">
+                    <i class="fas fa-sync-alt me-2"></i> Update My Recommendations
+                </a>
+            </div>
+            {% else %}
+            <div class="card mt-4 bg-light border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-info-circle text-primary fs-4 me-3"></i>
+                        <div>
+                            <h6>Complete Your Profile</h6>
+                            <p class="mb-0 small">Add your skills and interests to get personalized career recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Your Dashboard</h4>
+                    
+                    <div class="row g-4 mb-4">
+                        <div class="col-sm-6">
+                            <div class="card bg-light border-0 h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-briefcase fs-3 text-primary"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h5 class="mb-1">{{ recommendations|length }}</h5>
+                                            <p class="mb-0 text-muted">Career Recommendations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card bg-light border-0 h-100">
+                                <div class="card-body">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <i class="fas fa-chart-line fs-3 text-success"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <h5 class="mb-1">{{ current_user.skills.split(',')|length if current_user.skills else 0 }}</h5>
+                                            <p class="mb-0 text-muted">Skills Listed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mb-3">Your Top Recommendations</h5>
+                    {% if recommendations %}
+                    <div class="list-group">
+                        {% for recommendation in recommendations %}
+                        <a href="{{ url_for('career_details', career_id=recommendation.career_id) }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">{{ recommendation.career.name }}</h6>
+                                    <p class="mb-1 text-muted small">{{ recommendation.career.industry }}</p>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">{{ (recommendation.score * 100)|int }}% Match</span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="{{ url_for('recommendations') }}" class="btn btn-outline-primary btn-sm">View All Recommendations</a>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-clipboard-list text-muted fs-1 mb-3"></i>
+                        <h6>No recommendations yet</h6>
+                        <p class="text-muted mb-3">Get personalized career recommendations based on your profile.</p>
+                        <a href="{{ url_for('get_recommendations') }}" class="btn btn-primary">Get Recommendations</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if recommendations %}
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Skill Analysis</h4>
+                    <p class="text-muted">Based on your top career recommendations, consider developing these skills:</p>
+                    
+                    <div class="mb-4">
+                        {% set recommended_skills = [] %}
+                        {% for recommendation in recommendations[:3] %}
+                            {% for skill in recommendation.career.required_skills.split(',') %}
+                                {% if skill.strip() not in recommended_skills %}
+                                    {% set _ = recommended_skills.append(skill.strip()) %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        
+                        {% for skill in recommended_skills[:10] %}
+                        <span class="badge bg-info me-2 mb-2">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-lightbulb text-info me-2"></i>
+                            </div>
+                            <div>
+                                <h6 class="alert-heading">Pro Tip</h6>
+                                <p class="mb-0">Focus on developing skills that appear across multiple recommended careers for maximum versatility.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Provide Feedback - AI Career Guide{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h2 class="card-title mb-4">Provide Feedback</h2>
+                    <p class="text-muted mb-4">Your feedback helps us improve our recommendation system</p>
+                    
+                    <div class="mb-4">
+                        <div class="card bg-light border-0">
+                            <div class="card-body">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-briefcase fs-3 text-primary"></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h5 class="card-title mb-1">{{ recommendation.career.name }}</h5>
+                                        <p class="text-muted mb-0">{{ recommendation.career.industry }}</p>
+                                        <p class="mb-0 mt-2"><strong>Match Score:</strong> {{ (recommendation.score * 100)|int }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form action="{{ url_for('feedback', recommendation_id=recommendation.id) }}" method="post" class="needs-validation" novalidate>
+                        <div class="mb-4">
+                            <label class="form-label">How relevant is this career recommendation for you?</label>
+                            <div class="text-center">
+                                <div class="rating-stars mb-2">
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <input type="hidden" id="rating" name="rating" value="{{ existing_feedback.rating if existing_feedback else '' }}" required>
+                                <div class="small text-muted">Click to rate</div>
+                                <div class="invalid-feedback">
+                                    Please provide a rating.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="comments" class="form-label">Additional Comments (Optional)</label>
+                            <textarea class="form-control" id="comments" name="comments" rows="4" placeholder="Share your thoughts about this recommendation...">{{ existing_feedback.comments if existing_feedback else '' }}</textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('career_details', career_id=recommendation.career_id) }}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i> Back to Career
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i> Submit Feedback
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

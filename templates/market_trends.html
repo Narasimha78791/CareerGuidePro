@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Career Market Trends - AI Career Guide{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">Career Market Trends</h2>
+    <p class="text-muted mb-4">Explore current market demand and salary ranges for different career paths.</p>
+    
+    <div class="row">
+        <div class="col-lg-12 mb-5">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <h4 class="card-title mb-4">Market Demand Comparison</h4>
+                    
+                    {% if careers_with_trends %}
+                    <div class="chart-container">
+                        <canvas id="market-trends-chart" data-trends="{{ 
+                            careers_with_trends | map(attribute=0) | map(attribute='name') | zip(
+                            careers_with_trends | map(attribute=1) | map(attribute='demand_level'),
+                            careers_with_trends | map(attribute=1) | map(attribute='salary_range_min'),
+                            careers_with_trends | map(attribute=1) | map(attribute='salary_range_max')
+                            ) | map('zip') | list | tojson 
+                        }}"></canvas>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-chart-bar text-muted fs-1 mb-3"></i>
+                        <h5>No market trend data available</h5>
+                        <p class="text-muted">We're currently collecting market data for career paths.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        {% for career, trend in careers_with_trends %}
+        <div class="col-lg-6">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h4 class="card-title mb-1">{{ career.name }}</h4>
+                            <span class="badge bg-secondary">{{ career.industry }}</span>
+                        </div>
+                        {% if trend %}
+                        <div class="text-end">
+                            <div class="badge {% if trend.demand_level >= 0.8 %}bg-success{% elif trend.demand_level >= 0.5 %}bg-primary{% else %}bg-warning{% endif %} p-2">
+                                {% if trend.demand_level >= 0.8 %}
+                                    High Demand
+                                {% elif trend.demand_level >= 0.5 %}
+                                    Medium Demand
+                                {% else %}
+                                    Low Demand
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if trend %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Market Demand</span>
+                            <span class="fw-bold">{{ (trend.demand_level * 100)|int }}%</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar" role="progressbar" style="width: {{ (trend.demand_level * 100)|int }}%;" aria-valuenow="{{ (trend.demand_level * 100)|int }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>Salary Range</h6>
+                        <p class="fs-5">${{ trend.salary_range_min|int|format(",d") }} - ${{ trend.salary_range_max|int|format(",d") }}</p>
+                    </div>
+                    {% else %}
+                    <div class="text-muted">
+                        <p>No market trend data available for this career.</p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-auto">
+                        <a href="{{ url_for('career_details', career_id=career.id) }}" class="btn btn-outline-primary">
+                            View Career Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

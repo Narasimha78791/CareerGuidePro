@@ -1,0 +1,92 @@
+[
+  {
+    "career_id": 1,
+    "demand_level": 0.9,
+    "salary_range_min": 70000,
+    "salary_range_max": 150000
+  },
+  {
+    "career_id": 2,
+    "demand_level": 0.95,
+    "salary_range_min": 80000,
+    "salary_range_max": 160000
+  },
+  {
+    "career_id": 3,
+    "demand_level": 0.85,
+    "salary_range_min": 60000,
+    "salary_range_max": 120000
+  },
+  {
+    "career_id": 4,
+    "demand_level": 0.75,
+    "salary_range_min": 55000,
+    "salary_range_max": 110000
+  },
+  {
+    "career_id": 5,
+    "demand_level": 0.8,
+    "salary_range_min": 65000,
+    "salary_range_max": 130000
+  },
+  {
+    "career_id": 6,
+    "demand_level": 0.7,
+    "salary_range_min": 60000,
+    "salary_range_max": 120000
+  },
+  {
+    "career_id": 7,
+    "demand_level": 0.85,
+    "salary_range_min": 70000,
+    "salary_range_max": 140000
+  },
+  {
+    "career_id": 8,
+    "demand_level": 0.95,
+    "salary_range_min": 85000,
+    "salary_range_max": 170000
+  },
+  {
+    "career_id": 9,
+    "demand_level": 0.65,
+    "salary_range_min": 45000,
+    "salary_range_max": 90000
+  },
+  {
+    "career_id": 10,
+    "demand_level": 0.8,
+    "salary_range_min": 65000,
+    "salary_range_max": 130000
+  },
+  {
+    "career_id": 11,
+    "demand_level": 0.8,
+    "salary_range_min": 70000,
+    "salary_range_max": 135000
+  },
+  {
+    "career_id": 12,
+    "demand_level": 0.85,
+    "salary_range_min": 80000,
+    "salary_range_max": 150000
+  },
+  {
+    "career_id": 13,
+    "demand_level": 0.9,
+    "salary_range_min": 90000,
+    "salary_range_max": 180000
+  },
+  {
+    "career_id": 14,
+    "demand_level": 0.7,
+    "salary_range_min": 55000,
+    "salary_range_max": 110000
+  },
+  {
+    "career_id": 15,
+    "demand_level": 0.8,
+    "salary_range_min": 50000,
+    "salary_range_max": 100000
+  }
+]

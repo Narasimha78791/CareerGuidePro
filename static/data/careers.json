@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "name": "Software Developer",
+    "description": "Designs, builds, and maintains computer programs. Collaborates with teams to create software applications that solve real-world problems.",
+    "required_skills": "Programming languages (Python, Java, JavaScript), Problem-solving, Debugging, Software design, Version control, Communication",
+    "industry": "Information Technology"
+  },
+  {
+    "id": 2,
+    "name": "Data Scientist",
+    "description": "Analyzes complex data to help organizations make better decisions. Combines statistics, mathematics, and programming to extract insights from data.",
+    "required_skills": "Python, R, Statistics, Machine Learning, Data Visualization, SQL, Critical thinking",
+    "industry": "Information Technology"
+  },
+  {
+    "id": 3,
+    "name": "UX/UI Designer",
+    "description": "Creates user-friendly and visually appealing digital interfaces. Focuses on enhancing user satisfaction through improved usability and accessibility.",
+    "required_skills": "User research, Wireframing, Prototyping, Visual design, Figma/Sketch, Empathy, Communication",
+    "industry": "Design"
+  },
+  {
+    "id": 4,
+    "name": "Marketing Manager",
+    "description": "Develops and implements marketing strategies to promote products or services. Analyzes market trends and manages campaigns across various channels.",
+    "required_skills": "Strategic planning, Market research, Campaign management, Social media, SEO/SEM, Analytics, Communication",
+    "industry": "Marketing"
+  },
+  {
+    "id": 5,
+    "name": "Financial Analyst",
+    "description": "Evaluates financial data to help businesses make investment decisions. Analyzes market trends, company financials, and economic conditions.",
+    "required_skills": "Financial modeling, Excel, Accounting principles, Data analysis, Report writing, Attention to detail",
+    "industry": "Finance"
+  },
+  {
+    "id": 6,
+    "name": "Human Resources Manager",
+    "description": "Oversees the human resources department and develops HR strategies aligned with organizational goals. Manages recruitment, employee relations, and HR policies.",
+    "required_skills": "Recruitment, Employee relations, Conflict resolution, HR policies, Communication, Leadership, Emotional intelligence",
+    "industry": "Human Resources"
+  },
+  {
+    "id": 7,
+    "name": "Project Manager",
+    "description": "Plans, executes, and closes projects while ensuring they are completed on time and within budget. Coordinates teams and resources to achieve project goals.",
+    "required_skills": "Planning, Budgeting, Risk management, Team leadership, Stakeholder management, Problem-solving, Communication",
+    "industry": "Management"
+  },
+  {
+    "id": 8,
+    "name": "Cybersecurity Analyst",
+    "description": "Protects computer systems and networks from security breaches. Monitors for threats, implements security measures, and responds to incidents.",
+    "required_skills": "Network security, Vulnerability assessment, Security tools, Incident response, Risk analysis, Programming basics",
+    "industry": "Information Technology"
+  },
+  {
+    "id": 9,
+    "name": "Content Writer",
+    "description": "Creates written content for various platforms including websites, blogs, and social media. Researches topics and adapts writing style for different audiences.",
+    "required_skills": "Writing, Editing, Research, SEO knowledge, Content strategy, Creativity, Time management",
+    "industry": "Media"
+  },
+  {
+    "id": 10,
+    "name": "Healthcare Administrator",
+    "description": "Manages healthcare facilities, services, and staff. Ensures compliance with healthcare laws and regulations while improving operational efficiency.",
+    "required_skills": "Healthcare regulations, Budgeting, Staff management, Strategic planning, Communication, Problem-solving",
+    "industry": "Healthcare"
+  },
+  {
+    "id": 11,
+    "name": "Business Analyst",
+    "description": "Analyzes business processes and systems to identify areas for improvement. Bridges the gap between business needs and technology solutions.",
+    "required_skills": "Requirements gathering, Process analysis, Data analysis, Documentation, Communication, Critical thinking",
+    "industry": "Business"
+  },
+  {
+    "id": 12,
+    "name": "Product Manager",
+    "description": "Oversees the development and marketing of a product throughout its lifecycle. Defines product vision, strategy, and features based on market research and user feedback.",
+    "required_skills": "Product strategy, Market research, User experience, Technical knowledge, Stakeholder management, Prioritization",
+    "industry": "Product Development"
+  },
+  {
+    "id": 13,
+    "name": "Cloud Architect",
+    "description": "Designs and implements cloud computing solutions for organizations. Develops cloud strategies, selects appropriate platforms, and ensures security and scalability.",
+    "required_skills": "Cloud platforms (AWS, Azure, GCP), Network design, Security, Virtualization, Programming, Solution architecture",
+    "industry": "Information Technology"
+  },
+  {
+    "id": 14,
+    "name": "Environmental Scientist",
+    "description": "Studies environmental issues and develops solutions. Collects and analyzes data about air, water, soil, and other natural resources.",
+    "required_skills": "Scientific research, Data analysis, Environmental regulations, Field work, Technical writing, Problem-solving",
+    "industry": "Environmental Science"
+  },
+  {
+    "id": 15,
+    "name": "Digital Marketing Specialist",
+    "description": "Implements online marketing strategies across various digital channels. Manages social media, email campaigns, SEO, and paid advertising.",
+    "required_skills": "SEO/SEM, Social media marketing, Content creation, Email marketing, Analytics, Digital advertising platforms",
+    "industry": "Marketing"
+  }
+]
