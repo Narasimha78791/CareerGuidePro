@@ -24,19 +24,48 @@
                 data-industries="{{ recommendations | map(attribute='career.industry') | list | tojson }}"></canvas>
     </div>
     
-    <!-- For debugging -->
+    <!-- Fixed chart data handling -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         try {
             // Test access to the canvas element
             const chart = document.getElementById('recommendation-scores-chart');
-            // Test parsing data attributes
-            const careers = JSON.parse(chart.dataset.careers || '[]');
-            const scores = JSON.parse(chart.dataset.scores || '[]');
-            const industries = JSON.parse(chart.dataset.industries || '[]');
-            console.log("Successfully parsed chart data:", { careers, scores, industries });
+            if (!chart) {
+                console.warn("Chart canvas element not found");
+                return;
+            }
+            
+            // Safely parse data attributes with proper error handling
+            let careers = [], scores = [], industries = [];
+            
+            try {
+                careers = JSON.parse(chart.dataset.careers || '[]');
+            } catch (e) {
+                console.error("Failed to parse careers data:", e);
+                careers = [];
+            }
+            
+            try {
+                scores = JSON.parse(chart.dataset.scores || '[]');
+            } catch (e) {
+                console.error("Failed to parse scores data:", e);
+                scores = [];
+            }
+            
+            try {
+                industries = JSON.parse(chart.dataset.industries || '[]');
+            } catch (e) {
+                console.error("Failed to parse industries data:", e);
+                industries = [];
+            }
+            
+            console.log("Chart data:", { 
+                careers: careers || [], 
+                scores: scores || [], 
+                industries: industries || [] 
+            });
         } catch (error) {
-            console.error("Error parsing chart data:", error);
+            console.error("Error handling chart data:", error);
         }
     });
     </script>

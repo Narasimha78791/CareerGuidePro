@@ -263,19 +263,48 @@ class CareerRecommendationEngine:
         # Sort final recommendations by score
         top_indices.sort(key=lambda idx: combined_scores[idx], reverse=True)
         
-        # Create recommendation results
+        # Create recommendation results, ensuring no duplicates
         recommendations = []
+        seen_names = set()  # Track career names to prevent duplicates
+        
+        # First pass: Add top scoring unique careers
         for idx in top_indices:
             career = self.careers_data[idx]
-            recommendations.append({
-                'career_id': career['id'],
-                'name': career['name'],
-                'description': career['description'],
-                'required_skills': career['required_skills'],
-                'industry': career['industry'],
-                'score': float(combined_scores[idx]),  # Convert numpy float to Python float
-                'timestamp': datetime.now().isoformat()
-            })
+            if career['name'] not in seen_names:
+                recommendations.append({
+                    'career_id': career['id'],
+                    'name': career['name'],
+                    'description': career['description'],
+                    'required_skills': career['required_skills'],
+                    'industry': career['industry'],
+                    'score': float(combined_scores[idx]),  # Convert numpy float to Python float
+                    'timestamp': datetime.now().isoformat()
+                })
+                seen_names.add(career['name'])
+        
+        # Second pass: If we don't have enough recommendations due to duplicates,
+        # find additional careers from other high-scoring options
+        if len(recommendations) < num_recommendations:
+            # Get more indices beyond what we originally selected
+            extended_indices = np.array(combined_scores).argsort()[-(num_recommendations*3):][::-1]
+            
+            # Fill in with additional recommendations
+            for idx in extended_indices:
+                if len(recommendations) >= num_recommendations:
+                    break
+                    
+                career = self.careers_data[idx]
+                if career['name'] not in seen_names:
+                    recommendations.append({
+                        'career_id': career['id'],
+                        'name': career['name'],
+                        'description': career['description'],
+                        'required_skills': career['required_skills'],
+                        'industry': career['industry'],
+                        'score': float(combined_scores[idx]),  # Convert numpy float to Python float
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    seen_names.add(career['name'])
         
         return recommendations
     
@@ -302,18 +331,26 @@ class CareerRecommendationEngine:
         
         # Select careers from different industries
         recommendations = []
+        seen_career_names = set()  # Track career names to ensure no duplicates
         industries_list = list(industries.keys())
+        
+        # Shuffle industries to get different recommendations each time
+        np.random.shuffle(industries_list)
         
         # Ensure we don't try to get more recommendations than available industries
         num_industries = min(num_recommendations, len(industries_list))
         
         for i in range(num_industries):
             industry = industries_list[i % len(industries_list)]
-            # Get a career from this industry that we haven't recommended yet
-            industry_careers = industries[industry]
+            # Shuffle careers within this industry to get different ones each time
+            industry_careers = industries[industry].copy()
+            np.random.shuffle(industry_careers)
+            
+            # Find a career from this industry that we haven't recommended yet
+            added = False
             for career in industry_careers:
-                # Check if we've already recommended this career
-                if not any(rec.get('career_id') == career['id'] for rec in recommendations):
+                # Check if career name is already in recommendations
+                if career['name'] not in seen_career_names:
                     recommendations.append({
                         'career_id': career['id'],
                         'name': career['name'],
@@ -323,11 +360,39 @@ class CareerRecommendationEngine:
                         'score': 0.6,  # Medium score for default recommendations
                         'timestamp': datetime.now().isoformat()
                     })
+                    seen_career_names.add(career['name'])
+                    added = True
                     break
             
+            # If we couldn't add any career from this industry, try the next one
+            if not added:
+                continue
+                
             # If we have enough recommendations, stop
             if len(recommendations) >= num_recommendations:
                 break
+                
+        # If we still don't have enough recommendations, add careers from any industry
+        if len(recommendations) < num_recommendations:
+            all_careers = self.careers_data.copy()
+            np.random.shuffle(all_careers)
+            
+            for career in all_careers:
+                if career['name'] not in seen_career_names and len(recommendations) < num_recommendations:
+                    recommendations.append({
+                        'career_id': career['id'],
+                        'name': career['name'],
+                        'description': career['description'],
+                        'required_skills': career['required_skills'],
+                        'industry': career['industry'],
+                        'score': 0.5,  # Slightly lower score for these fallback recommendations
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    seen_career_names.add(career['name'])
+                    
+            # If we still don't have enough, that means our dataset is too small
+            if len(recommendations) < num_recommendations:
+                logging.warning(f"Could only generate {len(recommendations)} recommendations from the available data")
                 
         return recommendations
     
